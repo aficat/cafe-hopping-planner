@@ -16,9 +16,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { getCurrentPlan, saveCurrentPlan } from '../utils/storage';
+import { getCurrentPlan, saveCurrentPlan, savePastPlan, clearCurrentPlan } from '../utils/storage';
 import { optimizeRoute } from '../utils/routeOptimizer';
-import { mockCafes } from '../data/mockData';
+import { mockCafes, calculateDistance } from '../data/mockData';
+import Map from '../components/Map';
 import './PlanBuilderScreen.css';
 
 function PlanBuilderScreen() {
@@ -29,6 +30,9 @@ function PlanBuilderScreen() {
   const [transportMode, setTransportMode] = useState(plan.transportMode || 'walking');
   const [editingCafe, setEditingCafe] = useState(null);
   const [showNotes, setShowNotes] = useState({});
+  const [routePolyline, setRoutePolyline] = useState([]);
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [shareLink, setShareLink] = useState('');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -43,6 +47,40 @@ function PlanBuilderScreen() {
       navigate('/');
     }
   }, [cafes.length, navigate]);
+
+  // Calculate route polyline and distance when cafes change
+  useEffect(() => {
+    const cafesWithCoordinates = cafes.filter(cafe => 
+      cafe.coordinates && typeof cafe.coordinates.lat === 'number' && typeof cafe.coordinates.lng === 'number'
+    );
+    
+    if (cafesWithCoordinates.length > 0) {
+      // Create polyline coordinates
+      const coordinates = cafesWithCoordinates
+        .map(cafe => [cafe.coordinates.lat, cafe.coordinates.lng])
+        .filter(coord => coord[0] && coord[1]);
+      setRoutePolyline(coordinates);
+
+      // Calculate total distance
+      let distance = 0;
+      for (let i = 0; i < cafesWithCoordinates.length - 1; i++) {
+        const cafe1 = cafesWithCoordinates[i];
+        const cafe2 = cafesWithCoordinates[i + 1];
+        if (cafe1.coordinates && cafe2.coordinates) {
+          distance += calculateDistance(
+            cafe1.coordinates.lat,
+            cafe1.coordinates.lng,
+            cafe2.coordinates.lat,
+            cafe2.coordinates.lng
+          );
+        }
+      }
+      setTotalDistance(distance.toFixed(2));
+    } else {
+      setRoutePolyline([]);
+      setTotalDistance(0);
+    }
+  }, [cafes]);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -127,9 +165,47 @@ function PlanBuilderScreen() {
       date: new Date().toISOString()
     };
     
-    // Save plan and navigate
-    saveCurrentPlan(finalPlan);
-    navigate('/map');
+    // Save to past plans
+    savePastPlan(finalPlan);
+    clearCurrentPlan();
+    alert('Plan saved!');
+    navigate('/past-plans');
+  };
+
+  const handleShare = () => {
+    const finalPlan = {
+      ...plan,
+      cafes,
+      startTime,
+      transportMode,
+      date: new Date().toISOString()
+    };
+    const planData = JSON.stringify(finalPlan);
+    const encoded = btoa(planData);
+    const link = `${window.location.origin}/share/${encoded}`;
+    setShareLink(link);
+    
+    if (navigator.share) {
+      navigator.share({
+        title: 'My Cafe Hopping Plan',
+        text: 'Check out my cafe hopping route!',
+        url: link
+      });
+    } else {
+      navigator.clipboard.writeText(link);
+      alert('Link copied to clipboard!');
+    }
+  };
+
+  // Get center for map
+  const getMapCenter = () => {
+    const cafesWithCoordinates = cafes.filter(cafe => 
+      cafe.coordinates && typeof cafe.coordinates.lat === 'number' && typeof cafe.coordinates.lng === 'number'
+    );
+    if (cafesWithCoordinates.length > 0 && cafesWithCoordinates[0].coordinates) {
+      return [cafesWithCoordinates[0].coordinates.lat, cafesWithCoordinates[0].coordinates.lng];
+    }
+    return [1.2839, 103.8608]; // Default to Marina Bay
   };
 
   return (
@@ -177,34 +253,84 @@ function PlanBuilderScreen() {
         </button>
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={cafes.map(c => c.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          <div className="plan-cafes">
-            {cafes.map((cafe, index) => (
-              <SortableCafeItem
-                key={cafe.id}
-                cafe={cafe}
-                index={index}
-                onRemove={handleRemoveCafe}
-                onSaveNotes={handleSaveNotes}
-                showNotes={showNotes[cafe.id]}
-                setShowNotes={(show) => setShowNotes({ ...showNotes, [cafe.id]: show })}
+      <div className="plan-content-layout">
+        <div className="plan-left-section">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={cafes.map(c => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="plan-cafes">
+                {cafes.map((cafe, index) => (
+                  <SortableCafeItem
+                    key={cafe.id}
+                    cafe={cafe}
+                    index={index}
+                    onRemove={handleRemoveCafe}
+                    onSaveNotes={handleSaveNotes}
+                    showNotes={showNotes[cafe.id]}
+                    setShowNotes={(show) => setShowNotes({ ...showNotes, [cafe.id]: show })}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        </div>
+
+        <div className="plan-right-section">
+          <div className="map-container">
+            {cafes.length > 0 && cafes.some(c => c.coordinates) ? (
+              <Map
+                cafes={cafes.filter(c => c.coordinates)}
+                routePolyline={routePolyline || []}
+                center={getMapCenter()}
               />
-            ))}
+            ) : (
+              <div style={{ height: '500px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', borderRadius: '16px' }}>
+                <p>Add cafes to see your route on the map</p>
+              </div>
+            )}
           </div>
-        </SortableContext>
-      </DndContext>
+
+          <div className="route-info card">
+            <h2>Route Information</h2>
+            <div className="route-stats">
+              <div className="stat">
+                <span className="stat-label">Total Cafes:</span>
+                <span className="stat-value">{cafes.length}</span>
+              </div>
+              <div className="stat">
+                <span className="stat-label">Total Distance:</span>
+                <span className="stat-value">{totalDistance} km</span>
+              </div>
+              <div className="stat">
+                <span className="stat-label">Transport:</span>
+                <span className="stat-value">
+                  {transportMode === 'walking' && 'Walking'}
+                  {transportMode === 'cycling' && 'Cycling'}
+                  {transportMode === 'driving' && 'Driving'}
+                  {transportMode === 'public' && 'Public Transport'}
+                </span>
+              </div>
+              <div className="stat">
+                <span className="stat-label">Start Time:</span>
+                <span className="stat-value">{startTime || '09:00'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="plan-actions">
         <button className="btn btn-primary" onClick={handleSavePlan}>
-          Save & View Map
+          Save Plan
+        </button>
+        <button className="btn btn-primary" onClick={handleShare}>
+          Share Plan
         </button>
         <button
           className="btn btn-secondary"
@@ -217,6 +343,12 @@ function PlanBuilderScreen() {
         >
           Clear Plan
         </button>
+        {shareLink && (
+          <div className="share-link">
+            <p>Share this link:</p>
+            <input type="text" className="input" value={shareLink} readOnly />
+          </div>
+        )}
       </div>
     </div>
   );
