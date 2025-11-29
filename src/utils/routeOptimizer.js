@@ -1,8 +1,8 @@
 // Route optimization algorithm using nearest neighbor heuristic
 import { calculateDistance } from '../data/mockData';
 
-// Calculate travel time in minutes (simplified)
-const getTravelTime = (cafe1, cafe2, transportMode) => {
+// Calculate travel time in minutes (always walking)
+const getTravelTime = (cafe1, cafe2) => {
   const distance = calculateDistance(
     cafe1.coordinates.lat,
     cafe1.coordinates.lng,
@@ -10,20 +10,13 @@ const getTravelTime = (cafe1, cafe2, transportMode) => {
     cafe2.coordinates.lng
   );
   
-  // Average speeds in km/h
-  const speeds = {
-    walking: 5,
-    cycling: 15,
-    driving: 40,
-    public: 30
-  };
-  
-  const speed = speeds[transportMode] || 5;
+  // Always use walking speed (5 km/h)
+  const speed = 5;
   return Math.round((distance / speed) * 60); // Convert to minutes
 };
 
-// Optimize route using nearest neighbor algorithm
-export const optimizeRoute = (cafes, startTime, transportMode) => {
+// Optimize route using nearest neighbor algorithm (always uses walking)
+export const optimizeRoute = (cafes, startTime) => {
   if (cafes.length === 0) return cafes;
   
   const optimized = [];
@@ -71,7 +64,7 @@ export const optimizeRoute = (cafes, startTime, transportMode) => {
     
     // Add travel time to next cafe (except for last one)
     if (index < optimized.length - 1) {
-      const travelTime = getTravelTime(cafe, optimized[index + 1], transportMode);
+      const travelTime = getTravelTime(cafe, optimized[index + 1]);
       currentTime.setMinutes(currentTime.getMinutes() + 60 + travelTime); // 60 min at cafe + travel
     }
     

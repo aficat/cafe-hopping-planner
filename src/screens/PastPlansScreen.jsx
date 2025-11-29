@@ -55,10 +55,7 @@ function PastPlansScreen() {
                 <p><strong>{plan.cafes.length}</strong> cafes</p>
                 <p>Start: <strong>{plan.startTime || '09:00'}</strong></p>
                 <p>Transport: <strong>
-                  {plan.transportMode === 'walking' && 'Walking'}
-                  {plan.transportMode === 'cycling' && 'Cycling'}
-                  {plan.transportMode === 'driving' && 'Driving'}
-                  {plan.transportMode === 'public' && 'Public Transport'}
+                  Walking
                 </strong></p>
               </div>
               <div className="plan-card-cafes">

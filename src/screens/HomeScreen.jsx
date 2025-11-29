@@ -16,6 +16,8 @@ function HomeScreen() {
     priceRange: ''
   });
   const [currentPlanCount, setCurrentPlanCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const cafesPerPage = 6;
 
   useEffect(() => {
     setPopularCafes(getPopularCafes());
@@ -58,6 +60,17 @@ function HomeScreen() {
   const displayCafes = searchQuery || Object.values(filters).some(f => f) 
     ? filteredCafes 
     : popularCafes;
+
+  // Pagination calculations
+  const totalPages = Math.ceil(displayCafes.length / cafesPerPage);
+  const startIndex = (currentPage - 1) * cafesPerPage;
+  const endIndex = startIndex + cafesPerPage;
+  const paginatedCafes = displayCafes.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search/filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filters]);
 
   return (
     <div className="home-screen">
@@ -161,8 +174,8 @@ function HomeScreen() {
             : 'Popular in Singapore'}
         </h2>
         <div className="cafes-grid">
-          {displayCafes.length > 0 ? (
-            displayCafes.map(cafe => (
+          {paginatedCafes.length > 0 ? (
+            paginatedCafes.map(cafe => (
               <CafeCard key={cafe.id} cafe={cafe} />
             ))
           ) : (
@@ -171,6 +184,28 @@ function HomeScreen() {
             </div>
           )}
         </div>
+        
+        {displayCafes.length > cafesPerPage && (
+          <div className="pagination">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

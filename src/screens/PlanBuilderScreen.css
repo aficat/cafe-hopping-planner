@@ -69,18 +69,19 @@
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 2px solid var(--light-pink);
+  border-bottom: 2px solid var(--light-beige);
 }
 
 .drag-handle {
   cursor: grab;
   padding: 8px 12px;
-  background: var(--light-pink);
-  border-radius: 8px;
+  background: var(--light-beige);
+  border: 3px solid var(--black);
   font-size: 14px;
-  font-weight: 600;
-  color: var(--primary-pink);
+  font-weight: 700;
+  color: var(--primary-brown);
   user-select: none;
+  box-shadow: 3px 3px 0 0 var(--black);
 }
 
 .drag-handle:active {
@@ -88,16 +89,17 @@
 }
 
 .cafe-order {
-  background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
-  color: white;
+  background: var(--accent-yellow);
+  color: var(--black);
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  border: 3px solid var(--black);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 900;
   font-size: 14px;
+  box-shadow: 3px 3px 0 0 var(--black);
 }
 
 .cafe-name {
@@ -109,23 +111,26 @@
 }
 
 .remove-button {
-  background: transparent;
-  border: 2px solid var(--primary-pink);
-  color: var(--primary-pink);
+  background: var(--white);
+  border: 3px solid var(--black);
+  color: var(--accent-red);
   width: 32px;
   height: 32px;
-  border-radius: 50%;
   cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--black);
   font-size: 18px;
+  font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 
 .remove-button:hover {
-  background: var(--primary-pink);
-  color: white;
+  background: var(--accent-red);
+  color: var(--white);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--black);
 }
 
 .plan-cafe-content {
@@ -140,7 +145,7 @@
 }
 
 .cafe-time {
-  color: var(--accent-purple);
+  color: var(--accent-red);
   font-weight: 600;
   font-size: 16px;
 }
@@ -174,17 +179,18 @@
 
 .cafe-notes-display {
   padding: 12px;
-  background: var(--light-pink);
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-pink);
+  background: var(--light-beige);
+  border: 3px solid var(--black);
+  border-left: 6px solid var(--primary-brown);
   font-size: 14px;
   color: var(--text-dark);
+  box-shadow: 3px 3px 0 0 var(--black);
 }
 
 .map-container {
   margin-bottom: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
+  border: 4px solid var(--black);
+  box-shadow: 6px 6px 0 0 var(--black);
   overflow: hidden;
 }
 
@@ -194,7 +200,7 @@
 
 .route-info h2 {
   margin-bottom: 16px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
 }
 
 .route-stats {
@@ -208,8 +214,9 @@
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  background: var(--light-pink);
-  border-radius: 8px;
+  background: var(--light-beige);
+  border: 3px solid var(--black);
+  box-shadow: 3px 3px 0 0 var(--black);
 }
 
 .stat-label {
@@ -220,7 +227,7 @@
 
 .stat-value {
   font-size: 18px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
   font-weight: 700;
 }
 
@@ -228,8 +235,9 @@
   width: 100%;
   margin-top: 20px;
   padding: 20px;
-  background: var(--light-pink);
-  border-radius: 12px;
+  background: var(--light-beige);
+  border: 4px solid var(--black);
+  box-shadow: 4px 4px 0 0 var(--black);
 }
 
 .share-link p {

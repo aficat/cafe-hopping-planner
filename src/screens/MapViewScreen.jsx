@@ -149,12 +149,7 @@ function MapViewScreen() {
           </div>
           <div className="stat">
             <span className="stat-label">Transport:</span>
-            <span className="stat-value">
-              {plan.transportMode === 'walking' && 'Walking'}
-              {plan.transportMode === 'cycling' && 'Cycling'}
-              {plan.transportMode === 'driving' && 'Driving'}
-              {plan.transportMode === 'public' && 'Public Transport'}
-            </span>
+            <span className="stat-value">Walking</span>
           </div>
           <div className="stat">
             <span className="stat-label">Start Time:</span>

@@ -27,7 +27,7 @@ function PlanBuilderScreen() {
   const [plan, setPlan] = useState(getCurrentPlan());
   const [cafes, setCafes] = useState(plan.cafes || []);
   const [startTime, setStartTime] = useState(plan.startTime || '09:00');
-  const [transportMode, setTransportMode] = useState(plan.transportMode || 'walking');
+  const transportMode = 'walking'; // Always use walking
   const [editingCafe, setEditingCafe] = useState(null);
   const [showNotes, setShowNotes] = useState({});
   const [routePolyline, setRoutePolyline] = useState([]);
@@ -48,6 +48,56 @@ function PlanBuilderScreen() {
     }
   }, [cafes.length, navigate]);
 
+  // Update time slots when transport mode or start time changes (without reordering)
+  useEffect(() => {
+    if (cafes.length > 0) {
+      const cafesWithCoordinates = cafes.filter(cafe => 
+        cafe.coordinates && typeof cafe.coordinates.lat === 'number' && typeof cafe.coordinates.lng === 'number'
+      );
+      
+      if (cafesWithCoordinates.length > 0) {
+        // Recalculate time slots with walking speed, keeping current order
+        const [hours, minutes] = startTime.split(':').map(Number);
+        let currentTime = new Date();
+        currentTime.setHours(hours, minutes, 0, 0);
+        
+        const updatedCafes = cafesWithCoordinates.map((cafe, index) => {
+          const timeSlot = new Date(currentTime);
+          const timeString = timeSlot.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false 
+          });
+          
+          // Calculate travel time to next cafe
+          if (index < cafesWithCoordinates.length - 1) {
+            const nextCafe = cafesWithCoordinates[index + 1];
+            const distance = calculateDistance(
+              cafe.coordinates.lat,
+              cafe.coordinates.lng,
+              nextCafe.coordinates.lat,
+              nextCafe.coordinates.lng
+            );
+            
+            // Always use walking speed (5 km/h)
+            const speed = 5;
+            const travelTime = Math.round((distance / speed) * 60); // minutes
+            currentTime.setMinutes(currentTime.getMinutes() + 60 + travelTime); // 60 min at cafe + travel
+          }
+          
+          return {
+            ...cafe,
+            timeSlot: timeString
+          };
+        });
+        
+        setCafes(updatedCafes);
+        updatePlan({ cafes: updatedCafes });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startTime]); // Re-run when start time changes
+
   // Calculate route polyline and distance when cafes change
   useEffect(() => {
     const cafesWithCoordinates = cafes.filter(cafe => 
@@ -61,7 +111,7 @@ function PlanBuilderScreen() {
         .filter(coord => coord[0] && coord[1]);
       setRoutePolyline(coordinates);
 
-      // Calculate total distance
+      // Calculate total distance (always walking)
       let distance = 0;
       for (let i = 0; i < cafesWithCoordinates.length - 1; i++) {
         const cafe1 = cafesWithCoordinates[i];
@@ -128,7 +178,14 @@ function PlanBuilderScreen() {
       alert('Your plan is empty! Add some cafes first.');
       return;
     }
-    const optimized = optimizeRoute(cafes, startTime, transportMode);
+    const cafesWithCoordinates = cafes.filter(cafe => 
+      cafe.coordinates && typeof cafe.coordinates.lat === 'number' && typeof cafe.coordinates.lng === 'number'
+    );
+    if (cafesWithCoordinates.length === 0) {
+      alert('No cafes with valid coordinates to optimize.');
+      return;
+    }
+    const optimized = optimizeRoute(cafesWithCoordinates, startTime);
     setCafes(optimized);
     updatePlan({ cafes: optimized });
     alert('Route optimized!');
@@ -232,22 +289,6 @@ function PlanBuilderScreen() {
             }}
           />
         </div>
-        <div className="setting-group">
-          <label>Transport Mode:</label>
-          <select
-            className="input"
-            value={transportMode}
-            onChange={(e) => {
-              setTransportMode(e.target.value);
-              updatePlan({ transportMode: e.target.value });
-            }}
-          >
-            <option value="walking">Walking</option>
-            <option value="cycling">Cycling</option>
-            <option value="driving">Driving</option>
-            <option value="public">Public Transport</option>
-          </select>
-        </div>
         <button className="btn btn-primary" onClick={handleOptimizeRoute}>
           Optimize Route
         </button>
@@ -309,12 +350,7 @@ function PlanBuilderScreen() {
               </div>
               <div className="stat">
                 <span className="stat-label">Transport:</span>
-                <span className="stat-value">
-                  {transportMode === 'walking' && 'Walking'}
-                  {transportMode === 'cycling' && 'Cycling'}
-                  {transportMode === 'driving' && 'Driving'}
-                  {transportMode === 'public' && 'Public Transport'}
-                </span>
+                <span className="stat-value">Walking</span>
               </div>
               <div className="stat">
                 <span className="stat-label">Start Time:</span>

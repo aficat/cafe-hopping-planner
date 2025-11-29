@@ -19,8 +19,8 @@
 
 .map-container {
   margin-bottom: 30px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
+  border: 4px solid var(--black);
+  box-shadow: 6px 6px 0 0 var(--black);
   overflow: hidden;
 }
 
@@ -30,7 +30,7 @@
 
 .route-info h2 {
   margin-bottom: 20px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
 }
 
 .route-stats {
@@ -44,8 +44,9 @@
   flex-direction: column;
   gap: 8px;
   padding: 16px;
-  background: var(--light-pink);
-  border-radius: 12px;
+  background: var(--light-beige);
+  border: 3px solid var(--black);
+  box-shadow: 3px 3px 0 0 var(--black);
 }
 
 .stat-label {
@@ -56,7 +57,7 @@
 
 .stat-value {
   font-size: 20px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
   font-weight: 700;
 }
 
@@ -66,7 +67,7 @@
 
 .route-cafes h2 {
   margin-bottom: 20px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
 }
 
 .route-list {
@@ -79,18 +80,19 @@
   gap: 16px;
   margin-bottom: 20px;
   padding: 20px;
-  background: var(--light-pink);
-  border-radius: 12px;
-  border-left: 4px solid var(--primary-pink);
+  background: var(--light-beige);
+  border: 3px solid var(--black);
+  border-left: 6px solid var(--primary-brown);
+  box-shadow: 3px 3px 0 0 var(--black);
   counter-increment: route-counter;
 }
 
 .route-item-number {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
-  color: white;
-  border-radius: 50%;
+  background: var(--accent-yellow);
+  color: var(--black);
+  border: 3px solid var(--black);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,18 +135,18 @@
 .marker-popup strong {
   display: block;
   margin-bottom: 8px;
-  color: var(--primary-pink);
+  color: var(--primary-brown);
 }
 
 /* Merged popup styles */
 .merged-popup-header {
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 2px solid var(--light-pink);
+  border-bottom: 2px solid var(--light-beige);
 }
 
 .merged-popup-header strong {
-  color: var(--primary-pink);
+  color: var(--primary-brown);
   font-size: 16px;
   margin-bottom: 4px;
 }
@@ -165,8 +167,9 @@
 
 .merged-cafe-item {
   padding: 12px;
-  background: var(--light-pink);
-  border-radius: 8px;
+  background: var(--light-beige);
+  border: 3px solid var(--black);
+  box-shadow: 3px 3px 0 0 var(--black);
   border-left: 3px solid var(--primary-pink);
 }
 
@@ -188,7 +191,7 @@
 
 .merged-cafe-time {
   font-size: 12px;
-  color: var(--accent-purple);
+  color: var(--accent-red);
   font-weight: 600;
   margin: 4px 0;
 }
@@ -209,15 +212,15 @@
 .numbered-marker-badge {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
-  color: white;
-  border-radius: 50%;
+  background: var(--accent-yellow);
+  color: var(--black);
+  border: 3px solid var(--black);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+  box-shadow: 4px 4px 0 0 var(--black);
   border: 3px solid white;
   position: relative;
   z-index: 1000;
@@ -235,8 +238,9 @@
   width: 100%;
   margin-top: 20px;
   padding: 20px;
-  background: var(--light-pink);
-  border-radius: 12px;
+  background: var(--light-beige);
+  border: 4px solid var(--black);
+  box-shadow: 4px 4px 0 0 var(--black);
 }
 
 .share-link p {
