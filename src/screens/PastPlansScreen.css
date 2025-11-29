@@ -1,0 +1,124 @@
+.past-plans-screen {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.plans-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.plans-title {
+  margin: 0;
+}
+
+.no-plans {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.no-plans p {
+  margin-bottom: 16px;
+  color: var(--text-light);
+  font-size: 18px;
+}
+
+.plans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.plan-card {
+  transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+}
+
+.plan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--light-pink);
+}
+
+.plan-card-header h3 {
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.completed-badge {
+  background: linear-gradient(135deg, #51cf66, #40c057);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plan-card-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.plan-card-info p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.plan-card-info strong {
+  color: var(--primary-pink);
+}
+
+.plan-card-cafes {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--light-pink);
+  border-radius: 8px;
+}
+
+.plan-card-cafes strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.plan-card-cafes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plan-card-cafes li {
+  padding: 4px 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.plan-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.plan-card-actions .btn {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .plan-card-actions {
+    flex-direction: column;
+  }
+}
+

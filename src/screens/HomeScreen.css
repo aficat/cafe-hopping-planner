@@ -1,0 +1,112 @@
+.home-screen {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.home-title {
+  margin-bottom: 10px;
+}
+
+.home-subtitle {
+  color: var(--text-light);
+  font-size: 18px;
+}
+
+.home-actions {
+  margin-bottom: 30px;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  font-size: 18px;
+  padding: 16px 20px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.plan-button {
+  background: linear-gradient(135deg, var(--accent-purple), var(--primary-pink));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.filters-panel {
+  margin-top: 20px;
+  padding: 24px;
+}
+
+.filters-panel h3 {
+  margin-bottom: 20px;
+  color: var(--primary-pink);
+}
+
+.filter-group {
+  margin-bottom: 16px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.cafes-section {
+  margin-top: 40px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  color: var(--primary-pink);
+  font-size: 24px;
+}
+
+.cafes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-light);
+}
+
+@media (max-width: 768px) {
+  .cafes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
+

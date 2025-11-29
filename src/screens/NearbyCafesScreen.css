@@ -1,0 +1,83 @@
+.nearby-cafes-screen {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nearby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.nearby-title {
+  margin: 0;
+}
+
+.nearby-info {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.nearby-info p {
+  margin-bottom: 8px;
+  color: var(--text-dark);
+  font-size: 16px;
+}
+
+.info-note {
+  font-size: 14px;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.nearby-cafes-list {
+  margin-top: 30px;
+}
+
+.cafes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.nearby-cafe-wrapper {
+  position: relative;
+}
+
+.distance-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--text-light);
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-light);
+}
+
+@media (max-width: 768px) {
+  .cafes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
